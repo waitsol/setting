@@ -1,0 +1,50 @@
+git reset Head = git restore --staged
+git checkout = git restore
+
+假如误删除 文件 比如 rm a.txt 不是git rm a.txt 只需要 git restore 即可恢复文件 
+如果是 git rm a.txt 需要先执行  git restore --staged a.txt 回到rm a.txt状态 然后执行上一步
+撤销add文件 但是文件内容不改变 只是取消add
+git reset HEAD  	--撤销所有文件   是红色状态
+git reset HEAD  file  --撤销指定文件
+git restore --staged   file --取消add 变红名
+git restore file  --还原文件 取消本地修改 删除红名  只能是add的文件 也可以 相当于 reset --hard   和checkout 
+
+
+撤销commit 
+git reset HEAD^ 文件还存在 不会回退 文件状态是红字
+git reset --soft  HEAD^ 文件回到add状态即暂存区。
+
+版本回退 文件不保留
+git reset --hard HEAD --回退版本修改 即add的文件 全部回退  如果是新文件add  那么新文件被删除 如果没有add  不会被删除
+
+
+指定文件到某个版本
+git checkout version file --警告 会丢失工作去的file修改 即使添加到暂存区
+
+
+git add .添加当前文件夹下所有文件到暂存区
+git add -u 添加当前git已经追踪的文件 到暂存区 随便哪个目录
+git add -u  dir 添加dur已经追踪的文件 到暂存区 
+
+
+取消文件修改监听 比如说配置文件 修改了 但是不想上传  不想看见他红了
+https://blog.csdn.net/cookcyq__/article/details/121918646
+git update-index --assume-unchanged 指定你的文件
+// 例如
+git update-index --assume-unchanged ./config/index.js
+方法二
+git update-index --skip-worktree 指定你的文件
+// 例如
+git update-index --skip-worktree ./config/index.js
+
+恢复git监听
+git update-index --no-assume-unchanged 文件名
+git update-index --no-skip-worktree 文件名
+以下命令可以列出哪些文件被 assume-unchanged || skip-worktree 使用过
+window环境
+git ls-files -v | findstr /B h 			列出 assume-unchanged
+git ls-files -v | findstr /B S  		列出 skip-worktree
+linux环境
+git ls-files -v|grep "^h"
+git ls-files -v|grep "^S"
+
